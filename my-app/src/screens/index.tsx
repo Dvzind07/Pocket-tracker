@@ -5,139 +5,195 @@ import { styles } from './style';
 export default function SignIn() {
   const [saldo, setSaldo] = useState(500);
   const [valorGasto, setValorGasto] = useState('');
-const [mostrarInput, setMostrarInput] = useState(false);
-const [gastos, setGastos] = useState(300);
-const [valorSaldo, setValorSaldo] = useState('');
-const [valorRetirada, setValorRetirada] = useState('');
-const [movimentacoes, setMovimentacoes] = useState([
-  {
-    id: '1',
-    descricao: 'Mesada',
-    valor: 800,
-    tipo: 'entrada',
-  },
-  {
-    id: '2',
-    descricao: 'Gasto inicial',
-    valor: 300,
-    tipo: 'gasto',
-  },
-]);
-  return (
-   <View style={styles.container}>
-  <Text style={styles.title}>PocketTrack</Text>
-  <View style={styles.balanceCard}>
-    <Text style={styles.balanceLabel}>Saldo disponível</Text>
-    <Text style={styles.balance}>R$ {saldo},00</Text>
-  </View>
+  const [mostrarInput, setMostrarInput] = useState(false);
+  const [gastos, setGastos] = useState(300);
+  const [valorSaldo, setValorSaldo] = useState('');
+  const [valorRetirada, setValorRetirada] = useState('');
 
-  <View style={styles.row}>
-
-  <View style={styles.infoCard}>
-    <Text>Entradas</Text>
-    <Text>R$ 800,00</Text>
-  </View>
-
-  <View style={styles.infoCard}>
-    <Text>Gastos</Text>
-    <Text>R$ {gastos},00</Text>
-  </View>
-
-</View>
-
-<Pressable onPress={() => setMostrarInput(true)}>
-    <Text>Adicionar gasto</Text>
-   </Pressable>
-
-<TextInput
-  value={valorSaldo}
-  onChangeText={setValorSaldo}
-  placeholder="Adicionar saldo"
-  keyboardType="numeric"
-/>
-
-{mostrarInput && (
-  <View>
-    
-    <Text>Digite o valor do gasto:</Text>
-
-    <TextInput
-      value={valorGasto}
-      onChangeText={setValorGasto}
-      placeholder="Ex: 50"
-      keyboardType="numeric"
-    />
-
-    <Pressable onPress={() => {
-      const valor = Number(valorGasto);
-
-      setSaldo(saldo - valor);
-      setGastos(gastos + valor);
-      setMovimentacoes([
-    ...movimentacoes,
+  const [movimentacoes, setMovimentacoes] = useState([
     {
-      id: Date.now().toString(),
-      descricao: 'Gasto',
-      valor: valor,
+      id: '1',
+      descricao: 'Mesada',
+      valor: 800,
+      tipo: 'entrada',
+    },
+    {
+      id: '2',
+      descricao: 'Gasto inicial',
+      valor: 300,
       tipo: 'gasto',
     },
   ]);
 
-  setValorGasto('');
-  setMostrarInput(false);
+  return (
+    <View style={styles.container}>
 
-}}>
-      <Text>Confirmar gasto</Text>
-    
-    </Pressable>
-  
-  </View>
-)}
+      {/* TÍTULO */}
+      <Text style={styles.title}>
+        PocketTrack
+      </Text>
 
-<TextInput
-  value={valorSaldo}
-  onChangeText={setValorSaldo}
-  placeholder="Adicionar saldo"
-  keyboardType="numeric"
-/>
+      {/* SALDO */}
+      <View style={styles.balanceCard}>
+        <Text style={styles.balanceLabel}>
+          Saldo disponível
+        </Text>
 
-<Pressable onPress={() => {
-  const valor = Number(valorSaldo);
+        <Text style={styles.balance}>
+          R$ {saldo},00
+        </Text>
+      </View>
 
-  setSaldo(saldo + valor);
-  setValorSaldo('');
-}}>
-  <Text>+ Adicionar saldo</Text>
+      {/* ENTRADAS E GASTOS */}
+      <View style={styles.row}>
 
-</Pressable>
+        <View style={styles.infoCard}>
+          <Text style={styles.infoLabel}>
+            Entradas
+          </Text>
 
-<TextInput
-  value={valorRetirada}
-  onChangeText={setValorRetirada}
-  placeholder="Tirar saldo"
-  keyboardType="numeric"
-/>
+          <Text style={styles.infoValue}>
+            R$ 800,00
+          </Text>
+        </View>
 
-<Pressable onPress={() => {
-  const valor = Number(valorRetirada);
+        <View style={styles.infoCard}>
+          <Text style={styles.infoLabel}>
+            Gastos
+          </Text>
 
-  setSaldo(saldo - valor);
-  setValorRetirada('');
-}}>
-  <Text>- Tirar saldo</Text>
+          <Text style={styles.infoValue}>
+            R$ {gastos},00
+          </Text>
+        </View>
 
-</Pressable>
+      </View>
 
-<Text>Últimas movimentações</Text>
+      {/* ADICIONAR GASTO */}
+      <Pressable
+        style={styles.button}
+        onPress={() => setMostrarInput(true)}
+      >
+        <Text style={styles.buttonText}>
+          Adicionar gasto
+        </Text>
+      </Pressable>
 
-{movimentacoes.map((movimentacao) => (
-  <View key={movimentacao.id}>
-    
-    <Text>{movimentacao.descricao}</Text>
-    <Text>R$ {movimentacao.valor},00</Text>
-  
-  </View>
-))}
-  
-  </View>
-)}
+      {/* FORMULÁRIO DO GASTO */}
+      {mostrarInput && (
+        <View style={styles.form}>
+
+          <Text style={styles.formLabel}>
+            Digite o valor do gasto:
+          </Text>
+
+          <TextInput
+            style={styles.input}
+            value={valorGasto}
+            onChangeText={setValorGasto}
+            placeholder="Ex: 50"
+            keyboardType="numeric"
+          />
+
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              const valor = Number(valorGasto);
+
+              setSaldo(saldo - valor);
+              setGastos(gastos + valor);
+
+              setMovimentacoes([
+                ...movimentacoes,
+                {
+                  id: Date.now().toString(),
+                  descricao: 'Gasto',
+                  valor: valor,
+                  tipo: 'gasto',
+                },
+              ]);
+
+              setValorGasto('');
+              setMostrarInput(false);
+            }}
+          >
+            <Text style={styles.buttonText}>
+              Confirmar gasto
+            </Text>
+          </Pressable>
+
+        </View>
+      )}
+
+      {/* AÇÕES DE SALDO */}
+      <View style={styles.balanceActions}>
+
+        <TextInput
+          style={styles.input}
+          value={valorSaldo}
+          onChangeText={setValorSaldo}
+          placeholder="Valor para adicionar"
+          keyboardType="numeric"
+        />
+
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            const valor = Number(valorSaldo);
+
+            setSaldo(saldo + valor);
+            setValorSaldo('');
+          }}
+        >
+          <Text style={styles.buttonText}>
+            + Adicionar saldo
+          </Text>
+        </Pressable>
+
+        <TextInput
+          style={styles.input}
+          value={valorRetirada}
+          onChangeText={setValorRetirada}
+          placeholder="Valor para retirar"
+          keyboardType="numeric"
+        />
+
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            const valor = Number(valorRetirada);
+
+            setSaldo(saldo - valor);
+            setValorRetirada('');
+          }}
+        >
+          <Text style={styles.buttonText}>
+            - Tirar saldo
+          </Text>
+        </Pressable>
+
+      </View>
+
+      {/* MOVIMENTAÇÕES */}
+      <Text style={styles.movementsTitle}>
+        Últimas movimentações
+      </Text>
+
+      {movimentacoes.map((movimentacao) => (
+        <View
+          key={movimentacao.id}
+          style={styles.movement}
+        >
+          <Text style={styles.movementDescription}>
+            {movimentacao.descricao}
+          </Text>
+
+          <Text style={styles.movementValue}>
+            R$ {movimentacao.valor},00
+          </Text>
+        </View>
+      ))}
+
+    </View>
+  );
+}
